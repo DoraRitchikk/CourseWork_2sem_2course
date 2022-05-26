@@ -1,0 +1,224 @@
+﻿<Window x:Class="Course_Work_2sem.SeriesUser"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Course_Work_2sem"
+        mc:Ignorable="d"
+        Title="YourSeries" Height="600" Width="828"
+        WindowStartupLocation="CenterScreen"
+        Icon="/Image/SeriesMainIkon.png">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="214*"/>
+            <ColumnDefinition Width="435*"/>
+            <ColumnDefinition Width="151*"/>
+        </Grid.ColumnDefinitions>
+
+
+        <!-- МЕНЮ БОКОВОЕ-->
+        <StackPanel Background="#21243D" Grid.Column="0" >
+            <StackPanel HorizontalAlignment="Center">
+                <WrapPanel Height="55" >
+                    <Image Source="/Image/MySeries.png" Width="58" Height="50"/>
+                    <Button FontFamily="GOST Type AU" Content="Мои сериалы" Background="White" FontSize="24" Width="148" Height="28"  Command="{Binding MySeries}"  BorderThickness="0" />
+                </WrapPanel>
+            </StackPanel>
+            <StackPanel  HorizontalAlignment="Center">
+                <WrapPanel Height="55" >
+                    <Image Source="/Image/Another.png" Width="58" Height="50"/>
+                    <Button Content="Сериалы" Background="White"  FontSize="24" Width="148" Height="28" FontFamily="GOST Type AU" 
+                            Command="{Binding AllSeries}" BorderThickness="0"/>
+                </WrapPanel>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Center">
+                <WrapPanel  Height="55">
+                    <Image Source="Image/User.png" Width="58" Height="50" />
+                    <Button FontFamily="GOST Type AU" Content="Мой профиль" FontSize="24" BorderThickness="0" Background="White" Width="148" Height="28" Command="{Binding MyProfile}"/>
+                </WrapPanel>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Center">
+                <WrapPanel  Height="55">
+                    <Image Source="Image/Premier.png" Width="58" Height="50" />
+                    <Button FontFamily="GOST Type AU" Content="Премьеры" FontSize="24" BorderThickness="0" Background="White" Width="148" Height="28" Command="{Binding Premier}" />
+                </WrapPanel>
+            </StackPanel>
+            <StackPanel   HorizontalAlignment="Center" Visibility="Hidden" x:Name="PanelAdmin">
+                <WrapPanel  Height="55">
+                    <Image Source="/Image/ControlSys.png" Width="58" Height="50"/>
+                    <Button  FontFamily="GOST Type AU" Content="Управление" FontSize="24" Width="148" Background="White" BorderThickness="0" Height="28" Command="{Binding AdminPanel}"/>
+                </WrapPanel>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Выход -->
+        <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Center"  Height="55" Width="206">
+            <WrapPanel  Height="55">
+                <Image Source="/Image/exit.png" Width="58" Height="50"/>
+                <Button FontFamily="GOST Type AU" Content="Выход" FontSize="24"  BorderThickness="0" Background="White" Height="28" Command="{ Binding Exit}" Width="148"/>
+            </WrapPanel>
+        </StackPanel>
+        <!-- Поиск -->
+        <StackPanel Grid.Column="1" Background="#21243D" x:Name="SearchPanel" >
+            <WrapPanel Height="47">
+                <Label Content="Поиск : " Foreground="White" Margin="8,10,0,0" FontFamily="GOST Type AU" FontSize="20"/>
+                <TextBox Background="White"  Width="338" FontSize="18" FontFamily="GOST Type AU" Height="26" Margin="5,10,0,0" x:Name="SearchBoxText" TextChanged="ChangeMethod" />
+            </WrapPanel>
+        </StackPanel>
+
+        <!-- Вместо поискка на странице с сериалами юзера-->
+        <StackPanel Grid.Column="1" Background="#21243D" x:Name="PanelOnUsersSeries" Visibility="Hidden">
+            <TextBlock Text="Ваши сериалы" Background="#21243D" Foreground="White" Width="371" FontSize="28" FontFamily="GOST Type AU" Height="37" Margin="22,10,0,0" />
+        </StackPanel>
+
+        <!-- Вывод информации обо всех сериалах -->
+        <ListBox Grid.Column="1"  x:Name="ListOfAllSeries" BorderThickness="0" Margin="0,59,0,0" >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <WrapPanel>
+                            <Image Source="{Binding Path=imageSeries }" Width="200" Height="100"/>
+                        </WrapPanel>
+                        <WrapPanel>
+                            <Label Content="Название : " FontSize="18" Foreground="#21243D" Margin="0,-3,0,0"/>
+                            <TextBlock Text="{Binding Path=NameOfSeries}" x:Name="NameOfS" Foreground="#21243D" FontSize="18" Margin="0,2" />
+                            <Label Content="Жанр : " FontSize="18" Foreground="#21243D" Margin="17,-3,0,0"/>
+                            <TextBlock Text="{Binding Path=Category}" x:Name="Category" Foreground="#21243D" FontSize="18" Margin="10,2,0,0"/>
+                        </WrapPanel>
+                        <WrapPanel>
+                            <Label Content="Рейтинг : " FontSize="18" Foreground="#21243D" />
+                            <TextBlock Text="{Binding Path=rating}" x:Name="rating" Foreground="#21243D" FontSize="18" Margin="0,6,0,0"/>
+                        </WrapPanel>
+                        <WrapPanel>
+                            <Button x:Name="MoreInf" Content="Подробнее" Foreground="White" Background="#21243D" FontSize="18" Margin="20,10,0,0" Width="120" Click="MoreInfClick"/>
+                            <Button IsEnabled="True" Name="AddSeriesButton" Content="Добавить" Foreground="White" Background="#21243D" FontSize="18" Margin="20,10,0,0" Width="120" Click="AddNewSeries"/>
+                        </WrapPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <!-- Вывод информации о сериалах пользователя-->
+        <ListBox Grid.Column="1"  x:Name="ListOfUserSeries" BorderThickness="0" Margin="0,59,0,0" Visibility="Hidden">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <WrapPanel>
+                            <Image Source="{Binding Path=imageSeries}" Width="190" Height="100"/>
+                            <StackPanel>
+                                <WrapPanel>
+                                    <Label Content="Название : " FontSize="18" Foreground="#21243D" Margin="0,8,0,0" />
+                                    <TextBlock Text="{Binding Path=NameOfSeries}" x:Name="NameOfS" Foreground="#21243D" FontSize="18" Margin="0,13,0,0"/>
+                                </WrapPanel>
+                                <WrapPanel>
+                                    <Label Content="Жанр : " FontSize="18" Foreground="#21243D" Margin="2,8,0,0"/>
+                                    <TextBlock Text="{Binding Path=Category}" x:Name="Category" Foreground="#21243D" Margin="3,13,0,0" FontSize="18" />
+                                </WrapPanel>
+                                <StackPanel>
+                                    <Label Content="Вы остановились на : " FontSize="18" Foreground="#21243D" Margin="2,8,0,0"/>
+                                    <WrapPanel>
+                                        <Label Content="Сезон : " FontSize="18" Foreground="#21243D" Margin="2,0,0,0"/>
+                                        <TextBlock Text="{Binding Path= NumOfTheLastSesaon}" x:Name="theLastSeas" Foreground="#21243D" Margin="0,5,0,0" FontSize="18" />
+                                        <Label Content="Серия : " FontSize="18" Foreground="#21243D" Margin="2,0,0,0"/>
+                                        <TextBlock Text="{Binding Path= NumOfTheLastSer}" x:Name="theLastSer" Foreground="#21243D" Margin="0,5,0,0" FontSize="18" />
+                                    </WrapPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </WrapPanel>
+                        <StackPanel>
+                            <Button x:Name="MoreInf" Content="Подробнее" HorizontalAlignment="Left" Foreground="White" Background="#21243D" Width="140" Height="30" FontSize="18" Margin="25,10,0,0" Click="MoreInfClickForUser"/>
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <!-- Премьеры -->
+        <ListBox Grid.Column="1"  x:Name="ListOfPremier" BorderThickness="0" Margin="0,59,0,0" Visibility="Hidden">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <WrapPanel>
+                            <Label Content="Название : " FontSize="18" Foreground="#21243D" Margin="0,-3,0,0"/>
+                            <TextBlock Text="{Binding Path=NameOfPremierSeries}" x:Name="NameOfP" Foreground="#21243D" FontSize="18" Margin="0,2" />
+                            <Label Content="Жанр : " FontSize="18" Foreground="#21243D" Margin="17,-3,0,0"/>
+                            <TextBlock Text="{Binding Path=CategoruPremier}" x:Name="CategoryP" Foreground="#21243D" FontSize="18" Margin="10,2,0,0"/>
+                        </WrapPanel>
+                        <WrapPanel>
+                            <Label Content="Страна : " FontSize="18" Foreground="#21243D" Margin="0,-3,0,0"/>
+                            <TextBlock Text="{Binding Path=CountryPremier}" x:Name="CoutryP" Foreground="#21243D" FontSize="18" Margin="0,2" />
+                            <Label Content="Количество серий  : " FontSize="18" Foreground="#21243D" Margin="17,-3,0,0"/>
+                            <TextBlock Text="{Binding Path=NumOfSeasons}" x:Name="SeriesP" Foreground="#21243D" FontSize="18" Margin="10,2,0,0"/>
+                        </WrapPanel>
+                        <WrapPanel>
+                            <Label Content="Дата : " FontSize="18" Foreground="#21243D" Margin="0,-3,0,0"/>
+                            <TextBlock Text="{Binding Path=dateOfPremier}" x:Name="dateP" Foreground="#21243D" FontSize="18" Margin="0,2" />
+                            <Button x:Name="AddPremierButton" Visibility="Visible" Content="Буду смотреть" Foreground="White" Background="#21243D" Width="160" FontSize="18" Margin="20,0,0,0" Click="AddPremier"/>
+                        </WrapPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <!-- Мои премьеры -->
+        <ListBox Grid.Column="1"  x:Name="ListOfPremierUset" BorderThickness="0" Margin="0,59,0,0" Visibility="Hidden">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <WrapPanel>
+                            <Label Content="Название : " FontSize="18" Foreground="#21243D" Margin="0,-3,0,0"/>
+                            <TextBlock Text="{Binding Path=NameOfPremierSeries}" x:Name="NameOfP" Foreground="#21243D" FontSize="18" Margin="0,2" />
+                            <Label Content="Жанр : " FontSize="18" Foreground="#21243D" Margin="17,-3,0,0"/>
+                            <TextBlock Text="{Binding Path=CategoruPremier}" x:Name="CategoryP" Foreground="#21243D" FontSize="18" Margin="10,2,0,0"/>
+                        </WrapPanel>
+                        <WrapPanel>
+                            <Label Content="Страна : " FontSize="18" Foreground="#21243D" Margin="0,-3,0,0"/>
+                            <TextBlock Text="{Binding Path=CountryPremier}" x:Name="CoutryP" Foreground="#21243D" FontSize="18" Margin="0,2" />
+                            <Label Content="Количество серий  : " FontSize="18" Foreground="#21243D" Margin="17,-3,0,0"/>
+                            <TextBlock Text="{Binding Path=NumOfSeasons}" x:Name="SeriesP" Foreground="#21243D" FontSize="18" Margin="10,2,0,0"/>
+                        </WrapPanel>
+                        <WrapPanel>
+                            <Label Content="Дата : " FontSize="18" Foreground="#21243D" Margin="0,-3,0,0"/>
+                            <TextBlock Text="{Binding Path=dateOfPremier}" x:Name="dateP" Foreground="#21243D" FontSize="18" Margin="0,2" />
+                        </WrapPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <!-- правая панель юзера -->
+        <StackPanel  Background="#21243D" Grid.Column="2" x:Name="RightPabelMySeries" Visibility="Hidden">
+            <Image Source="{Binding Path=PhotoOfUser}" Width="110" Margin="0,10,0,0" x:Name="imgUser"/>
+            <TextBlock Text="{Binding Path=NameOfUser}" x:Name="NameuserBpx" Foreground="White" FontSize="22" Width="134" Height="30"  Margin="45,10,0,0" FontFamily="GOST Type AU"/>
+            <Button Content="Просмотренные " Foreground="Black" Background="White" Width="120" Height="26" FontFamily="GOST Type AU" FontSize="18" Click="ViewsSeries"/>
+            <Button Content="Мои премьеры" Foreground="Black" Background="White" Width="120" Height="26" FontFamily="GOST Type AU" FontSize="18" Margin="0,10,0,0" Click="MyPremier"/>
+        </StackPanel>
+        <!-- Боковое правое меню-->
+        <StackPanel  Background="#21243D"  Grid.Column="2" x:Name="rightPanelSeries">
+            <Image Source="Image/Logo.jpg" Width="110" Margin="0,10,0,0"/>
+            <StackPanel Margin="0,10,0,0">
+                <Label Content="Фильтрация : " Foreground="White" Width="106" FontFamily="GOST Type AU" FontSize="22"/>
+                <TextBlock Text="Категория" HorizontalAlignment="Center" Foreground="White" FontFamily="GOST Type AU" FontSize="20"/>
+                <ComboBox Height="25" Width="140" FontFamily="GOST Type AU" Margin="0,10,0,0" FontSize="18" x:Name="BoxWithCategoryFilter">
+                    <ComboBoxItem Content="Драма" />
+                    <ComboBoxItem Content="Комедия"/>
+                    <ComboBoxItem Content="Триллер"/>
+                </ComboBox>
+                <TextBlock Text="Страна" HorizontalAlignment="Center" Foreground="White" FontFamily="GOST Type AU" FontSize="22"/>
+                <ComboBox Height="25" Width="140" FontFamily="GOST Type AU" Margin="0,10,0,0" FontSize="18" x:Name="FilterForCountry">
+                    <ComboBoxItem Content="Россия" />
+                    <ComboBoxItem Content="Турция"/>
+                    <ComboBoxItem Content="США"/>
+                </ComboBox>
+                <TextBlock Text="Год" HorizontalAlignment="Center" Foreground="White" FontFamily="GOST Type AU" FontSize="22"/>
+                <TextBox Height="25" Width="140" FontFamily="GOST Type AU" FontSize="18" x:Name="YearFilter"/>
+            </StackPanel>
+            <StackPanel>
+                <TextBlock Text="Фильтрация по рейтингу : " TextWrapping="Wrap" FontSize="18" Foreground="White" Margin="0,10,0,0" HorizontalAlignment="Center" FontFamily="GOST Type AU" />
+                <RadioButton Content="По возростанию" x:Name="MinMax" Foreground="White" FontFamily="GOST Type AU" FontSize="18" Margin="10,10,0,0" />
+                <RadioButton Content="По убыванию" x:Name="MaxMin" Foreground="White" FontFamily="GOST Type AU" FontSize="18" Margin="10,10,0,0" />
+                <Button Content="Применить" FontFamily="GOST Type AU" Width="120" Height="34" FontSize="18" Margin="0,10,0,0" Command="{Binding SearchBy}" />
+                <Button Content="Очистить" FontFamily="GOST Type AU" Width="100" Height="30" FontSize="18" Margin="0,10,0,0" Click="CleanFilter"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

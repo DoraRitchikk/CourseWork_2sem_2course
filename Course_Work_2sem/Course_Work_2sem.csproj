@@ -1,0 +1,58 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Image\AdminWin.jpg" />
+    <None Remove="Image\Another.png" />
+    <None Remove="Image\ControlSys.png" />
+    <None Remove="Image\exit.png" />
+    <None Remove="Image\Logo.jpg" />
+    <None Remove="Image\LogoAll.png" />
+    <None Remove="Image\MoreInfIcon.png" />
+    <None Remove="Image\MySeries.png" />
+    <None Remove="Image\Premier.png" />
+    <None Remove="Image\Register.png" />
+    <None Remove="Image\SeriesMainIkon.png" />
+    <None Remove="Image\user.png" />
+    <None Remove="Image\UserWin.png" />
+    <None Remove="user.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Image\AdminWin.jpg" />
+    <Resource Include="Image\ControlSys.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EntityFramework" Version="6.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.4" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Image\Another.png" />
+    <Resource Include="Image\exit.png" />
+    <Resource Include="Image\Logo.jpg" />
+    <Resource Include="Image\LogoAll.png" />
+    <Resource Include="Image\MoreInfIcon.png" />
+    <Resource Include="Image\MySeries.png" />
+    <Resource Include="Image\Premier.png" />
+    <Resource Include="Image\Register.png" />
+    <Resource Include="Image\SeriesMainIkon.png" />
+    <Resource Include="Image\User.png" />
+    <Resource Include="Image\UserWin.png" />
+  </ItemGroup>
+
+</Project>
