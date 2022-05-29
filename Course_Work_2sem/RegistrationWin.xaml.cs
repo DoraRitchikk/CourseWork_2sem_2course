@@ -48,6 +48,8 @@ namespace Course_Work_2sem
 
                 SqlConnection sqlConnection = new SqlConnection(@" Data Source = DESKTOP-H0E8CDQ\MSSQLSERVER01; Initial Catalog = YourSeries; Integrated Security = True");
                 sqlConnection.Open();
+
+
                 string TrueOrFalseUser = $"Select UserName from REGISTRATION where EXISTS(Select UserName from REGISTRATION where UserName like '{NameOfUser}')";
                 SqlCommand createCommand3 = new SqlCommand(TrueOrFalseUser, sqlConnection);
                 object trueOrFalse = createCommand3.ExecuteScalar();

@@ -136,79 +136,86 @@ namespace Course_Work_2sem
         //Отнимаем один просмотренный эпизод
         private void DeleteEpisodes(object sender, RoutedEventArgs e)
         {
-            if (ListOfAllSeries.SelectedItems.Count == 1)
+            try
             {
-                try
+                if (ListOfAllSeries.SelectedItems.Count == 1)
                 {
-
-                    SqlConnection sqlConnection = new SqlConnection(@" Data Source = DESKTOP-H0E8CDQ\MSSQLSERVER01; Initial Catalog = YourSeries; Integrated Security = True");
-                    SqlDataAdapter dataAdapter = new SqlDataAdapter();
-                    sqlConnection.Open();
-
-                    var text = (ListOfAllSeries.SelectedItem as DataRowView)["NumOfViewEpisodes"].ToString();
-                    var text2 = (ListOfAllSeries.SelectedItem as DataRowView)["NumOfSesaon"].ToString();
-                    int NewEpisodes = Convert.ToInt32(text);
-                    if (Convert.ToInt32(text) != 0)
+                    try
                     {
-                        NewEpisodes = Convert.ToInt32(text) - 1;
+
+                        SqlConnection sqlConnection = new SqlConnection(@" Data Source = DESKTOP-H0E8CDQ\MSSQLSERVER01; Initial Catalog = YourSeries; Integrated Security = True");
+                        SqlDataAdapter dataAdapter = new SqlDataAdapter();
+                        sqlConnection.Open();
+
+                        var text = (ListOfAllSeries.SelectedItem as DataRowView)["NumOfViewEpisodes"].ToString();
+                        var text2 = (ListOfAllSeries.SelectedItem as DataRowView)["NumOfSesaon"].ToString();
+                        int NewEpisodes = Convert.ToInt32(text);
+                        if (Convert.ToInt32(text) != 0)
+                        {
+                            NewEpisodes = Convert.ToInt32(text) - 1;
+                        }
+                        else
+                        {
+                            MessageBox.Show("Больше нечего удалять(");
+                            NewEpisodes = Convert.ToInt32(text);
+                        }
+                        int NumOfSeason = Convert.ToInt32(text2);
+
+                        string cmd = $" UPDATE UserEpisodes SET NumOfViewEpisodes = {NewEpisodes} where UserEpisodes.idSeries like '{idSeries}' and UserEpisodes.idUser like '{idUser}' and UserEpisodes.NumOfSesaon like '{NumOfSeason}' ";
+
+                        SqlCommand createCommand = new SqlCommand(cmd, sqlConnection);
+                        createCommand.ExecuteNonQuery();
+
+
+                        //Просмотренный ли полностью
+                        string avgSeries = $"SELECT sum(NumOfEpisodes) FROM Episodes where IdSeries like '{idSeries}'";
+                        SqlCommand createCommand1 = new SqlCommand(avgSeries, sqlConnection);
+                        string AvgSer = createCommand1.ExecuteScalar().ToString();
+
+                        string avgUsersSeries = $"SELECT sum(NumOfViewEpisodes) FROM UserEpisodes where idSeries like '{idSeries}' and idUser like '{idUser}'";
+                        SqlCommand createCommand2 = new SqlCommand(avgSeries, sqlConnection);
+                        string AvgUserSer = createCommand2.ExecuteScalar().ToString();
+
+                        if (Convert.ToInt32(AvgSer) == Convert.ToInt32(AvgUserSer))
+                        {
+                            string isW = $" UPDATE UserSeries set isWatched = 0 where IdSeries like '{idSeries}' and IdOfUser like '{idUser}' ";
+                            SqlCommand createCommand3 = new SqlCommand(isW, sqlConnection);
+                            createCommand3.ExecuteNonQuery();
+                        }
+
+                        //Получаем предыдущий сезон
+                        string cmdq = $" SELECT TOP(1) NumOfSesaon FROM UserEpisodes where idUser like '{idUser}' and idSeries like '{idSeries}' and NumOfViewEpisodes > 0 order by NumOfSesaon desc ";
+                        SqlCommand createCommandq = new SqlCommand(cmdq, sqlConnection);
+                        string NewSes = createCommandq.ExecuteScalar().ToString();
+
+                        //Получаем предыдущую серию сезона
+                        string cmdd = $" SELECT TOP(1) NumOfViewEpisodes FROM UserEpisodes where idUser like '{idUser}' and idSeries like '{idSeries}' and NumOfViewEpisodes > 0 order by NumOfSesaon desc ";
+                        SqlCommand createCommandd = new SqlCommand(cmdd, sqlConnection);
+                        string NewSer = createCommandd.ExecuteScalar().ToString();
+
+                        //Обновляем последнее просмотренное
+                        string UPD = $" UPDATE TheLast SET NumOftheLastSesaon = {Convert.ToInt32(NewSes)}, NumOfTheLastSer = {Convert.ToInt32(NewSer)} where IDUser like '{idUser}' and IDSer like '{idSeries}'";
+                        SqlCommand createCommandu = new SqlCommand(UPD, sqlConnection);
+                        createCommandu.ExecuteNonQuery();
+
+
+                        sqlConnection.Close();
+
+                        GetAll(idUser.ToString(), idSeries.ToString());
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        MessageBox.Show("Больше нечего удалять(");
-                        NewEpisodes = Convert.ToInt32(text);
+                        MessageBox.Show(ex.Message);
                     }
-                    int NumOfSeason = Convert.ToInt32(text2);
-
-                    string cmd = $" UPDATE UserEpisodes SET NumOfViewEpisodes = {NewEpisodes} where UserEpisodes.idSeries like '{idSeries}' and UserEpisodes.idUser like '{idUser}' and UserEpisodes.NumOfSesaon like '{NumOfSeason}' ";
-
-                    SqlCommand createCommand = new SqlCommand(cmd, sqlConnection);
-                    createCommand.ExecuteNonQuery();
-
-
-                    //Просмотренный ли полностью
-                    string avgSeries = $"SELECT sum(NumOfEpisodes) FROM Episodes where IdSeries like '{idSeries}'";
-                    SqlCommand createCommand1 = new SqlCommand(avgSeries, sqlConnection);
-                    string AvgSer = createCommand1.ExecuteScalar().ToString();
-
-                    string avgUsersSeries = $"SELECT sum(NumOfViewEpisodes) FROM UserEpisodes where idSeries like '{idSeries}' and idUser like '{idUser}'";
-                    SqlCommand createCommand2 = new SqlCommand(avgSeries, sqlConnection);
-                    string AvgUserSer = createCommand2.ExecuteScalar().ToString();
-
-                    if (Convert.ToInt32(AvgSer) == Convert.ToInt32(AvgUserSer))
-                    {
-                        string isW = $" UPDATE UserSeries set isWatched = 0 where IdSeries like '{idSeries}' and IdOfUser like '{idUser}' ";
-                        SqlCommand createCommand3 = new SqlCommand(isW, sqlConnection);
-                        createCommand3.ExecuteNonQuery();
-                    }
-
-                    //Получаем предыдущий сезон
-                    string cmdq = $" SELECT TOP(1) NumOfSesaon FROM UserEpisodes where idUser like '{idUser}' and idSeries like '{idSeries}' and NumOfViewEpisodes > 0 order by NumOfSesaon desc ";
-                    SqlCommand createCommandq = new SqlCommand(cmdq, sqlConnection);
-                    string NewSes = createCommandq.ExecuteScalar().ToString();
-
-                    //Получаем предыдущую серию сезона
-                    string cmdd = $" SELECT TOP(1) NumOfViewEpisodes FROM UserEpisodes where idUser like '{idUser}' and idSeries like '{idSeries}' and NumOfViewEpisodes > 0 order by NumOfSesaon desc ";
-                    SqlCommand createCommandd = new SqlCommand(cmdd, sqlConnection);
-                    string NewSer =  createCommandd.ExecuteScalar().ToString();
-
-                    //Обновляем последнее просмотренное
-                    string UPD = $" UPDATE TheLast SET NumOftheLastSesaon = {Convert.ToInt32(NewSes)}, NumOfTheLastSer = {Convert.ToInt32(NewSer)} where IDUser like '{idUser}' and IDSer like '{idSeries}'";
-                    SqlCommand createCommandu = new SqlCommand(UPD, sqlConnection);
-                    createCommandu.ExecuteNonQuery();
-
-
-                    sqlConnection.Close();
-
-                    GetAll(idUser.ToString(), idSeries.ToString());
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show("Вы не выбрали ни один элемент");
                 }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Вы не выбрали ни один элемент"); 
+                MessageBox.Show("Вы не выбрали ни один элемент");
             }
         }
        

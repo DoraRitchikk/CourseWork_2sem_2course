@@ -48,57 +48,71 @@ namespace Course_Work_2sem
 
         private void ChangeUser(object sender, RoutedEventArgs e)
         {
-            string NewLog = NewLogin.Text;
-            string srcPhoto = SRCForUserImage.Text;
-
-            string srcForPhoto = SRCForUserImage.Text;
-            string cmd = "";
-            SqlConnection sqlConnection = new SqlConnection(@" Data Source = DESKTOP-H0E8CDQ\MSSQLSERVER01; Initial Catalog = YourSeries; Integrated Security = True");
-            SqlDataAdapter dataAdapter = new SqlDataAdapter();
-            sqlConnection.Open();
-            if (NewLogin.Text != "" &&  NewLogin.Text.Length < 15 && NewLogin.Text.Length > 4)
+            try
             {
-                cmd = $" UPDATE REGISTRATION SET UserName = '{NewLogin.Text}' where UserID like '{IDU}' ";
-                SqlCommand createCommand = new SqlCommand(cmd, sqlConnection);
-                createCommand.ExecuteNonQuery();
-            }
-            else
-            {
-                MessageBox.Show("Не валидное значение");
-            }
+                string NewLog = NewLogin.Text;
+                string cmd = "";
 
-            if (srcPhoto.Length > 0)
-            {
-                string cmd5 = $" UPDATE REGISTRATION SET PhotoOfUser = '{srcForPhoto}' where UserID like '{IDU}' ";
-                SqlCommand createCommand5 = new SqlCommand(cmd5, sqlConnection);
-                createCommand5.ExecuteNonQuery();
-            }
-
-            
-            string getPremierId = $"SELECT UserName,PhotoOfUser FROM REGISTRATION WHERE UserID like '{IDU}'";
-            SqlCommand createCommand3 = new SqlCommand(getPremierId, sqlConnection);
-            string NameU = createCommand3.ExecuteScalar().ToString();
-            MessageBox.Show("Изменено успешно");
-
-            if(NewPassword.Text != "")
-            {
-                string NewPasswordd = NewPassword.Text;
-                string NewPasswordRepeatt = NewPasswordRepeat.Text;
-                if (NewPasswordd == NewPasswordRepeatt)
+                SqlConnection sqlConnection = new SqlConnection(@" Data Source = DESKTOP-H0E8CDQ\MSSQLSERVER01; Initial Catalog = YourSeries; Integrated Security = True");
+                SqlDataAdapter dataAdapter = new SqlDataAdapter();
+                sqlConnection.Open();
+                
+                if (NewLogin.Text != "" && NewLogin.Text.Length < 15 && NewLogin.Text.Length > 6)
                 {
-                    string cmd2 = $" UPDATE REGISTRATION SET PasswordUser = '{NewPasswordd}' where UserID like '{IDU}' ";
-
-                    SqlCommand createCommand2 = new SqlCommand(cmd2, sqlConnection);
-                    createCommand2.ExecuteNonQuery();
+                    cmd = $" UPDATE REGISTRATION SET UserName = '{NewLogin.Text}' where UserID like '{IDU}' ";
+                    SqlCommand createCommand = new SqlCommand(cmd, sqlConnection);
+                    createCommand.ExecuteNonQuery();
                 }
                 else
                 {
-                    MessageBox.Show("Пароли не совпадают");
+                    MessageBox.Show("Не валидное значение");
                 }
+
+                if (SRCForUserImage.Text.Length != 0)
+                {
+                    if (SRCForUserImage.Text.Length > 15)
+                    {
+                        string srcForPhoto = SRCForUserImage.Text;
+                        string cmd5 = $" UPDATE REGISTRATION SET PhotoOfUser = '{srcForPhoto}' where UserID like '{IDU}' ";
+                        imageBox.Source = new BitmapImage(new Uri(srcForPhoto));
+                        SqlCommand createCommand5 = new SqlCommand(cmd5, sqlConnection);
+                        createCommand5.ExecuteNonQuery();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Некорректное значение ссылки");
+                    }
+                }
+
+
+                string getPremierId = $"SELECT UserName,PhotoOfUser FROM REGISTRATION WHERE UserID like '{IDU}'";
+                SqlCommand createCommand3 = new SqlCommand(getPremierId, sqlConnection);
+                string NameU = createCommand3.ExecuteScalar().ToString();
+
+                if (NewPassword.Text != "")
+                {
+                    string NewPasswordd = NewPassword.Text;
+                    string NewPasswordRepeatt = NewPasswordRepeat.Text;
+                    if (NewPasswordd == NewPasswordRepeatt)
+                    {
+                        string cmd2 = $" UPDATE REGISTRATION SET PasswordUser = '{NewPasswordd}' where UserID like '{IDU}' ";
+
+                        SqlCommand createCommand2 = new SqlCommand(cmd2, sqlConnection);
+                        createCommand2.ExecuteNonQuery();
+                        MessageBox.Show("Изменено успешно");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Пароли не совпадают");
+                    }
+                }
+
+                sqlConnection.Close();
             }
-
-            sqlConnection.Close();
-
+            catch (Exception ex)
+            {
+                MessageBox.Show("Проверьте корректность введённых данных");
+            }
         }
 
         private void Back(object sender, RoutedEventArgs e)

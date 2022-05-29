@@ -75,25 +75,30 @@
         <ListBox Grid.Column="1"  x:Name="ListOfAllSeries" BorderThickness="0" Margin="0,59,0,0" >
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel>
-                        <WrapPanel>
+                    <WrapPanel>
+                        <StackPanel>
                             <Image Source="{Binding Path=imageSeries }" Width="200" Height="100"/>
-                        </WrapPanel>
-                        <WrapPanel>
-                            <Label Content="Название : " FontSize="18" Foreground="#21243D" Margin="0,-3,0,0"/>
-                            <TextBlock Text="{Binding Path=NameOfSeries}" x:Name="NameOfS" Foreground="#21243D" FontSize="18" Margin="0,2" />
-                            <Label Content="Жанр : " FontSize="18" Foreground="#21243D" Margin="17,-3,0,0"/>
-                            <TextBlock Text="{Binding Path=Category}" x:Name="Category" Foreground="#21243D" FontSize="18" Margin="10,2,0,0"/>
-                        </WrapPanel>
-                        <WrapPanel>
-                            <Label Content="Рейтинг : " FontSize="18" Foreground="#21243D" />
-                            <TextBlock Text="{Binding Path=rating}" x:Name="rating" Foreground="#21243D" FontSize="18" Margin="0,6,0,0"/>
-                        </WrapPanel>
-                        <WrapPanel>
-                            <Button x:Name="MoreInf" Content="Подробнее" Foreground="White" Background="#21243D" FontSize="18" Margin="20,10,0,0" Width="120" Click="MoreInfClick"/>
-                            <Button IsEnabled="True" Name="AddSeriesButton" Content="Добавить" Foreground="White" Background="#21243D" FontSize="18" Margin="20,10,0,0" Width="120" Click="AddNewSeries"/>
-                        </WrapPanel>
-                    </StackPanel>
+                            <Button x:Name="MoreInf" Content="Подробнее" Foreground="White" Background="#21243D" FontSize="18" Margin="0,10,0,0" Width="120" Click="MoreInfClick"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <WrapPanel>
+                                <Label Content="Название : " FontSize="18" Foreground="#21243D" Margin="0,-3,0,0"/>
+                                <TextBlock Text="{Binding Path=NameOfSeries}" x:Name="NameOfS" Foreground="#21243D" FontSize="18" Margin="0,2" />
+                            </WrapPanel>
+                            <WrapPanel>
+                                <Label Content="Жанр : " FontSize="18" Foreground="#21243D" Margin="0,-3,0,0"/>
+                                <TextBlock Text="{Binding Path=Category}" x:Name="Category" Foreground="#21243D" FontSize="18" Margin="0,2,0,0"/>
+                            </WrapPanel>
+                            <WrapPanel>
+                                <Label Content="Рейтинг : " FontSize="18" Foreground="#21243D" />
+                                <TextBlock Text="{Binding Path=rating}" x:Name="rating" Foreground="#21243D" FontSize="18" Margin="0,5,0,0"/>
+                            </WrapPanel>
+
+                            <WrapPanel>
+                                <Button IsEnabled="True" Name="AddSeriesButton" Content="Добавить" Foreground="White" Background="#21243D" FontSize="18" Margin="20,14,0,0" Width="120" Click="AddNewSeries"/>
+                            </WrapPanel>
+                        </StackPanel>
+                    </WrapPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
@@ -111,11 +116,11 @@
                                     <TextBlock Text="{Binding Path=NameOfSeries}" x:Name="NameOfS" Foreground="#21243D" FontSize="18" Margin="0,13,0,0"/>
                                 </WrapPanel>
                                 <WrapPanel>
-                                    <Label Content="Жанр : " FontSize="18" Foreground="#21243D" Margin="2,8,0,0"/>
-                                    <TextBlock Text="{Binding Path=Category}" x:Name="Category" Foreground="#21243D" Margin="3,13,0,0" FontSize="18" />
+                                    <Label Content="Жанр : " FontSize="18" Foreground="#21243D" Margin="2,-2,0,0"/>
+                                    <TextBlock Text="{Binding Path=Category}" x:Name="Category" Foreground="#21243D" Margin="3,3,0,0" FontSize="18" />
                                 </WrapPanel>
                                 <StackPanel>
-                                    <Label Content="Вы остановились на : " FontSize="18" Foreground="#21243D" Margin="2,8,0,0"/>
+                                    <Label Content="Вы остановились на : " FontSize="18" Foreground="#21243D" Margin="2,0,0,0"/>
                                     <WrapPanel>
                                         <Label Content="Сезон : " FontSize="18" Foreground="#21243D" Margin="2,0,0,0"/>
                                         <TextBlock Text="{Binding Path= NumOfTheLastSesaon}" x:Name="theLastSeas" Foreground="#21243D" Margin="0,5,0,0" FontSize="18" />
@@ -126,7 +131,7 @@
                             </StackPanel>
                         </WrapPanel>
                         <StackPanel>
-                            <Button x:Name="MoreInf" Content="Подробнее" HorizontalAlignment="Left" Foreground="White" Background="#21243D" Width="140" Height="30" FontSize="18" Margin="25,10,0,0" Click="MoreInfClickForUser"/>
+                            <Button x:Name="MoreInf" Content="Подробнее" HorizontalAlignment="Left" Foreground="White" Background="#21243D" Width="140" Height="30" FontSize="18" Margin="26,1,0,0" Click="MoreInfClickForUser"/>
                         </StackPanel>
                     </StackPanel>
                 </DataTemplate>
@@ -199,15 +204,24 @@
                 <Label Content="Фильтрация : " Foreground="White" Width="106" FontFamily="GOST Type AU" FontSize="22"/>
                 <TextBlock Text="Категория" HorizontalAlignment="Center" Foreground="White" FontFamily="GOST Type AU" FontSize="20"/>
                 <ComboBox Height="25" Width="140" FontFamily="GOST Type AU" Margin="0,10,0,0" FontSize="18" x:Name="BoxWithCategoryFilter">
+                    <ComboBoxItem Content=""/>
                     <ComboBoxItem Content="Драма" />
                     <ComboBoxItem Content="Комедия"/>
                     <ComboBoxItem Content="Триллер"/>
+                    <ComboBoxItem Content="Документальный"/>
+                    <ComboBoxItem Content="Боевик"/>
+                    <ComboBoxItem Content="Детектив"/>
                 </ComboBox>
                 <TextBlock Text="Страна" HorizontalAlignment="Center" Foreground="White" FontFamily="GOST Type AU" FontSize="22"/>
                 <ComboBox Height="25" Width="140" FontFamily="GOST Type AU" Margin="0,10,0,0" FontSize="18" x:Name="FilterForCountry">
+                    <ComboBoxItem Content=""/>
                     <ComboBoxItem Content="Россия" />
                     <ComboBoxItem Content="Турция"/>
                     <ComboBoxItem Content="США"/>
+                    <ComboBoxItem Content="Индия"/>
+                    <ComboBoxItem Content="Турция"/>
+                    <ComboBoxItem Content="Канада"/>
+                    <ComboBoxItem Content="Великобритания"/>
                 </ComboBox>
                 <TextBlock Text="Год" HorizontalAlignment="Center" Foreground="White" FontFamily="GOST Type AU" FontSize="22"/>
                 <TextBox Height="25" Width="140" FontFamily="GOST Type AU" FontSize="18" x:Name="YearFilter"/>

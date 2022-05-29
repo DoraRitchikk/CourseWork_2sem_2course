@@ -122,7 +122,7 @@ namespace Course_Work_2sem
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("Что-то пошло не так...");
             }
         }
 
@@ -157,27 +157,35 @@ namespace Course_Work_2sem
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("Что-то пошло не так....");
             }
         }
 
         //Окно "Мой аккаунт"
         public void MyAccount()
-        { 
-            MyAccount myAcc = new MyAccount(IDU);
-            myAcc.Show();
+        {
+            try
+            {
+                MyAccount myAcc = new MyAccount(IDU);
+                myAcc.Show();
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show("Что-то пошло не так...");
+            }
         }
 
         //Премьеры
         public void Premier()
         {
-            ListOfPremier.Visibility = Visibility.Visible;
-            ListOfAllSeries.Visibility = Visibility.Hidden;
-            ListOfUserSeries.Visibility = Visibility.Hidden;
-            ListOfPremierUset.Visibility = Visibility.Hidden;
 
             try
             {
+                ListOfPremier.Visibility = Visibility.Visible;
+                ListOfAllSeries.Visibility = Visibility.Hidden;
+                ListOfUserSeries.Visibility = Visibility.Hidden;
+                ListOfPremierUset.Visibility = Visibility.Hidden;
+
                 SqlConnection sqlConnection = new SqlConnection(@" Data Source = DESKTOP-H0E8CDQ\MSSQLSERVER01; Initial Catalog = YourSeries; Integrated Security = True");
                 SqlDataAdapter dataAdapter = new SqlDataAdapter();
                 sqlConnection.Open();
@@ -195,7 +203,7 @@ namespace Course_Work_2sem
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("Что-то пошшло не так....");
             }
         }
 
@@ -203,28 +211,49 @@ namespace Course_Work_2sem
         //Выход из учётной записи
         public void ExitEnter()
         {
-            MainWindow main = new MainWindow();
-            main.Show();
-            this.Close();
+            try
+            {
+                MainWindow main = new MainWindow();
+                main.Show();
+                this.Close();
+            }
+            catch
+            {
+                MessageBox.Show("Что-то пошло не так....");
+            }
         }
 
         //Панель админа
         public void ControlItems()
         {
-            AdminPanel adminPanel = new AdminPanel();
-            adminPanel.Show();
+            try
+            {
+                AdminPanel adminPanel = new AdminPanel();
+                adminPanel.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Что-то пошло не так");
+            }
         }
 
         //Подробнее обо всех сериалах
         private void MoreInfClick(object sender, RoutedEventArgs e)
         {
-            if (ListOfAllSeries.SelectedItems.Count == 1)
+            try
             {
-                var text = (ListOfAllSeries.SelectedItem as DataRowView)["NameOfSeries"].ToString();
-                MoreInformation moreWin = new MoreInformation(text);
-                moreWin.Show();
+                if (ListOfAllSeries.SelectedItems.Count == 1)
+                {
+                    var text = (ListOfAllSeries.SelectedItem as DataRowView)["NameOfSeries"].ToString();
+                    MoreInformation moreWin = new MoreInformation(text);
+                    moreWin.Show();
+                }
+                else
+                {
+                    MessageBox.Show("Вы не выбрали ни один элемент");
+                }
             }
-            else
+            catch(Exception ex)
             {
                 MessageBox.Show("Вы не выбрали ни один элемент");
             }
@@ -233,94 +262,111 @@ namespace Course_Work_2sem
         //Добавить новый сериал в "Мои сериалы"
         private void AddNewSeries(object sender, RoutedEventArgs e)
         {
-            if (ListOfAllSeries.SelectedItems.Count > 0)
+            try
             {
-                var text = (ListOfAllSeries.SelectedItem as DataRowView)["NameOfSeries"].ToString();
-                try
+                if (ListOfAllSeries.SelectedItems.Count > 0)
                 {
-                    SqlConnection sqlConnection = new SqlConnection(@" Data Source = DESKTOP-H0E8CDQ\MSSQLSERVER01; Initial Catalog = YourSeries; Integrated Security = True");
-                    SqlDataAdapter dataAdapter = new SqlDataAdapter();
-                    sqlConnection.Open();
-
-
-                    string getID = $"SELECT IDSeries FROM SERIES Where NameOfSeries like '{text}'";
-                    SqlCommand createCommand2 = new SqlCommand(getID, sqlConnection);
-                    string value = createCommand2.ExecuteScalar().ToString();
-                    int idSer = Convert.ToInt32(value);
-
-
-                    string isAdd = $"SELECT IsAdded FROM UserSeries Where IdSeries like '{idSer}' and IdOfUser like '{IDU}'";
-                    SqlCommand createCommand3 = new SqlCommand(isAdd, sqlConnection);
-                    int isAdde = 0;
-                    int i = Convert.ToInt32(createCommand3.ExecuteScalar());
-
-                    if (i != 0)
+                    var text = (ListOfAllSeries.SelectedItem as DataRowView)["NameOfSeries"].ToString();
+                    try
                     {
-                        string isAdded = createCommand3.ExecuteScalar().ToString();
-                        isAdde = Convert.ToInt32(isAdded);
-                    }
-                    if (isAdde == 1)
-                    {
-                        MessageBox.Show("Сериал уже добавлен");
-                    }
-                    else
-                    {
-                        string getUserId = $"SELECT UserID FROM REGISTRATION WHERE UserID like '{IDU}'";
-                        SqlCommand createCommand4 = new SqlCommand(getUserId, sqlConnection);
-                        string value2 = createCommand4.ExecuteScalar().ToString();
-                        int IDUs = Convert.ToInt32(value2);
-                        sqlConnection.Close();
+                        SqlConnection sqlConnection = new SqlConnection(@" Data Source = DESKTOP-H0E8CDQ\MSSQLSERVER01; Initial Catalog = YourSeries; Integrated Security = True");
+                        SqlDataAdapter dataAdapter = new SqlDataAdapter();
                         sqlConnection.Open();
 
-                        int IsAd = 1;
 
-                        string cmd = $" Insert  into UserSeries(IdSeries,IdOfUser,IsAdded) values ('{idSer}','{IDUs}','{IsAd}')" +
-                            $"          Insert into UserEpisodes(idSeries,idUser,NumOfSesaon)" +
-                            $"Select UserSeries.IdSeries,UserSeries.IdOfUser,Episodes.NumOfSeason FROM UserSeries,Episodes where UserSeries.IdSeries like '{idSer}' and UserSeries.IdOfUser like '{IDUs}' and Episodes.IdSeries like '{idSer}' ";
-
-                        SqlCommand createCommand = new SqlCommand(cmd, sqlConnection);
-                        createCommand.ExecuteNonQuery();
+                        string getID = $"SELECT IDSeries FROM SERIES Where NameOfSeries like '{text}'";
+                        SqlCommand createCommand2 = new SqlCommand(getID, sqlConnection);
+                        string value = createCommand2.ExecuteScalar().ToString();
+                        int idSer = Convert.ToInt32(value);
 
 
+                        string isAdd = $"SELECT IsAdded FROM UserSeries Where IdSeries like '{idSer}' and IdOfUser like '{IDU}'";
+                        SqlCommand createCommand3 = new SqlCommand(isAdd, sqlConnection);
+                        int isAdde = 0;
+                        int i = Convert.ToInt32(createCommand3.ExecuteScalar());
 
-                        string cmd2 = $" Insert into TheLast(IDUser,IDSer) values('{IDUs}','{idSer}')";
-                        SqlCommand createCommand6 = new SqlCommand(cmd2, sqlConnection);
-                        createCommand6.ExecuteNonQuery();
+                        if (i != 0)
+                        {
+                            string isAdded = createCommand3.ExecuteScalar().ToString();
+                            isAdde = Convert.ToInt32(isAdded);
+                        }
+                        if (isAdde == 1)
+                        {
+                            MessageBox.Show("Сериал уже добавлен");
+                        }
+                        else
+                        {
+                            string getUserId = $"SELECT UserID FROM REGISTRATION WHERE UserID like '{IDU}'";
+                            SqlCommand createCommand4 = new SqlCommand(getUserId, sqlConnection);
+                            string value2 = createCommand4.ExecuteScalar().ToString();
+                            int IDUs = Convert.ToInt32(value2);
+                            sqlConnection.Close();
+                            sqlConnection.Open();
+
+                            int IsAd = 1;
+
+                            string cmd = $" Insert  into UserSeries(IdSeries,IdOfUser,IsAdded) values ('{idSer}','{IDUs}','{IsAd}')" +
+                                $"          Insert into UserEpisodes(idSeries,idUser,NumOfSesaon)" +
+                                $"Select UserSeries.IdSeries,UserSeries.IdOfUser,Episodes.NumOfSeason FROM UserSeries,Episodes where UserSeries.IdSeries like '{idSer}' and UserSeries.IdOfUser like '{IDUs}' and Episodes.IdSeries like '{idSer}' ";
+
+                            SqlCommand createCommand = new SqlCommand(cmd, sqlConnection);
+                            createCommand.ExecuteNonQuery();
+
+
+
+                            string cmd2 = $" Insert into TheLast(IDUser,IDSer) values('{IDUs}','{idSer}')";
+                            SqlCommand createCommand6 = new SqlCommand(cmd2, sqlConnection);
+                            createCommand6.ExecuteNonQuery();
+                            MessageBox.Show("Сериал добавлен в раздел \"Мои сериалы\" ");
+                        }
+                        sqlConnection.Close();
+                         
                     }
-                    sqlConnection.Close();
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show("Выберите элемент из списка");
                 }
             }
-            else
+            catch(Exception ex)
             {
-                MessageBox.Show("Выберите элемент из списка");
+                MessageBox.Show("Что-то пошло не так");
             }
         }
-        
+
         //По 4 категориям
         public void ForCategoryFour(string filter1, string filter2, string filter3,string filter4)
         {
-            SqlConnection sqlConnection = new SqlConnection(@" Data Source = DESKTOP-H0E8CDQ\MSSQLSERVER01; Initial Catalog = YourSeries; Integrated Security = True");
-            SqlDataAdapter dataAdapter = new SqlDataAdapter();
-            sqlConnection.Open();
+            try
+            {
+                SqlConnection sqlConnection = new SqlConnection(@" Data Source = DESKTOP-H0E8CDQ\MSSQLSERVER01; Initial Catalog = YourSeries; Integrated Security = True");
+                SqlDataAdapter dataAdapter = new SqlDataAdapter();
+                sqlConnection.Open();
 
-            string cmd = $"SELECT NameOfSeries,Category,rating,imageSeries FROM SERIES " + filter1 + filter2 + filter3 + filter4;
+                string cmd = $"SELECT NameOfSeries,Category,rating,imageSeries FROM SERIES " + filter1 + filter2 + filter3 + filter4;
 
-            SqlCommand createCommand = new SqlCommand(cmd, sqlConnection);
-            createCommand.ExecuteNonQuery();
+                SqlCommand createCommand = new SqlCommand(cmd, sqlConnection);
+                createCommand.ExecuteNonQuery();
 
-            SqlDataAdapter adapter = new SqlDataAdapter(createCommand);
-            DataTable dt = new DataTable("SERIES");
-            adapter.Fill(dt);
-            ListOfAllSeries.ItemsSource = dt.DefaultView;
+                SqlDataAdapter adapter = new SqlDataAdapter(createCommand);
+                DataTable dt = new DataTable("SERIES");
+                adapter.Fill(dt);
+                ListOfAllSeries.ItemsSource = dt.DefaultView;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Что-то пошло не так");
+            }
         }
         
         //По 3 категориям
         public void ForCategoryThree(string filter1,string filter2,string filter3)
         {
+            try { 
             SqlConnection sqlConnection = new SqlConnection(@" Data Source = DESKTOP-H0E8CDQ\MSSQLSERVER01; Initial Catalog = YourSeries; Integrated Security = True");
             SqlDataAdapter dataAdapter = new SqlDataAdapter();
             sqlConnection.Open();
@@ -334,11 +380,17 @@ namespace Course_Work_2sem
             DataTable dt = new DataTable("SERIES");
             adapter.Fill(dt);
             ListOfAllSeries.ItemsSource = dt.DefaultView;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Что-то пошло не так");
+            }
         }
         
         //По 2 категориям
         public void ForCategoryTwo(string filter1, string filter2)
         {
+            try { 
             SqlConnection sqlConnection = new SqlConnection(@" Data Source = DESKTOP-H0E8CDQ\MSSQLSERVER01; Initial Catalog = YourSeries; Integrated Security = True");
             SqlDataAdapter dataAdapter = new SqlDataAdapter();
             sqlConnection.Open();
@@ -352,24 +404,36 @@ namespace Course_Work_2sem
             DataTable dt = new DataTable("SERIES");
             adapter.Fill(dt);
             ListOfAllSeries.ItemsSource = dt.DefaultView;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Что-то пошло не так");
+            }
         }
         
         //По 1 категории
         public void ForCategoryOne(string filter1)
         {
-            SqlConnection sqlConnection = new SqlConnection(@" Data Source = DESKTOP-H0E8CDQ\MSSQLSERVER01; Initial Catalog = YourSeries; Integrated Security = True");
-            SqlDataAdapter dataAdapter = new SqlDataAdapter();
-            sqlConnection.Open();
+            try
+            {
+                SqlConnection sqlConnection = new SqlConnection(@" Data Source = DESKTOP-H0E8CDQ\MSSQLSERVER01; Initial Catalog = YourSeries; Integrated Security = True");
+                SqlDataAdapter dataAdapter = new SqlDataAdapter();
+                sqlConnection.Open();
 
-            string cmd = $"SELECT NameOfSeries,Category,rating,imageSeries FROM SERIES " + filter1;
+                string cmd = $"SELECT NameOfSeries,Category,rating,imageSeries FROM SERIES " + filter1;
 
-            SqlCommand createCommand = new SqlCommand(cmd, sqlConnection);
-            createCommand.ExecuteNonQuery();
+                SqlCommand createCommand = new SqlCommand(cmd, sqlConnection);
+                createCommand.ExecuteNonQuery();
 
-            SqlDataAdapter adapter = new SqlDataAdapter(createCommand);
-            DataTable dt = new DataTable("SERIES");
-            adapter.Fill(dt);
-            ListOfAllSeries.ItemsSource = dt.DefaultView;
+                SqlDataAdapter adapter = new SqlDataAdapter(createCommand);
+                DataTable dt = new DataTable("SERIES");
+                adapter.Fill(dt);
+                ListOfAllSeries.ItemsSource = dt.DefaultView;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
         
         //Поиск по категориям
@@ -385,18 +449,18 @@ namespace Course_Work_2sem
                 SqlDataAdapter dataAdapter = new SqlDataAdapter();
                 sqlConnection.Open();
                 int z = 0;
-                if (BoxWithCategoryFilter.SelectedIndex > -1)
+                if (BoxWithCategoryFilter.SelectedIndex > 0)
                 {
                     string category = BoxWithCategoryFilter.Text;
                     cmd1 = $"where Category like '{category}' ";
                     z++;
                 }
-                if (FilterForCountry.SelectedIndex > -1)
+                if (FilterForCountry.SelectedIndex > 0)
                 {
                     string country = FilterForCountry.Text;
                     if (cmd1 == "")
                     {
-                        cmd1 = $"CountryOfSeries like '{country}'";
+                        cmd1 = $"where CountryOfSeries like '{country}'";
                     }
                     else
                     {
@@ -488,7 +552,7 @@ namespace Course_Work_2sem
             }
             catch(Exception e)
             {
-                MessageBox.Show(e.Message);
+                MessageBox.Show("Проверьте правильность введённых данных");
             }
 
         }
@@ -496,28 +560,35 @@ namespace Course_Work_2sem
         //Подробнее для Юзера
         private void MoreInfClickForUser(object sender, RoutedEventArgs e)
         {
-            if (ListOfUserSeries.SelectedItems.Count == 1)
+            try
             {
-                var text = (ListOfUserSeries.SelectedItem as DataRowView)["NameOfSeries"].ToString();
-                //Получаем ID юзера и сериала
-                SqlConnection sqlConnection = new SqlConnection(@" Data Source = DESKTOP-H0E8CDQ\MSSQLSERVER01; Initial Catalog = YourSeries; Integrated Security = True");
-                SqlDataAdapter dataAdapter = new SqlDataAdapter();
-                sqlConnection.Open();
+                if (ListOfUserSeries.SelectedItems.Count == 1)
+                {
+                    var text = (ListOfUserSeries.SelectedItem as DataRowView)["NameOfSeries"].ToString();
+                    //Получаем ID юзера и сериала
+                    SqlConnection sqlConnection = new SqlConnection(@" Data Source = DESKTOP-H0E8CDQ\MSSQLSERVER01; Initial Catalog = YourSeries; Integrated Security = True");
+                    SqlDataAdapter dataAdapter = new SqlDataAdapter();
+                    sqlConnection.Open();
 
-                //Получаем ID сериала
-                string cmd2 = $"SELECT IDSeries from SERIES where NameOfSeries like '{text}'";
+                    //Получаем ID сериала
+                    string cmd2 = $"SELECT IDSeries from SERIES where NameOfSeries like '{text}'";
 
-                SqlCommand createCommand2 = new SqlCommand(cmd2, sqlConnection);
-                createCommand2.ExecuteNonQuery();
+                    SqlCommand createCommand2 = new SqlCommand(cmd2, sqlConnection);
+                    createCommand2.ExecuteNonQuery();
 
-                string idSer = createCommand2.ExecuteScalar().ToString();
+                    string idSer = createCommand2.ExecuteScalar().ToString();
 
-                sqlConnection.Close();
+                    sqlConnection.Close();
 
-                UsersMore moreU = new UsersMore(IDU.ToString(), idSer);
-                moreU.Show();
+                    UsersMore moreU = new UsersMore(IDU.ToString(), idSer);
+                    moreU.Show();
+                }
+                else
+                {
+                    MessageBox.Show("Вы не выбрали ни один элемент");
+                }
             }
-            else
+            catch (Exception ex)
             {
                 MessageBox.Show("Вы не выбрали ни один элемент");
             }
@@ -526,43 +597,50 @@ namespace Course_Work_2sem
         //Добавить премьеру в список своих
         private void AddPremier(object sender, RoutedEventArgs e)
         {
-            if (ListOfPremier.SelectedItems.Count != 0)
+            try
             {
-                var text = (ListOfPremier.SelectedItem as DataRowView)["NameOfPremierSeries"].ToString();
-                try
+                if (ListOfPremier.SelectedItems.Count != 0)
                 {
-
-                    SqlConnection sqlConnection = new SqlConnection(@" Data Source = DESKTOP-H0E8CDQ\MSSQLSERVER01; Initial Catalog = YourSeries; Integrated Security = True");
-                    SqlDataAdapter dataAdapter = new SqlDataAdapter();
-                    sqlConnection.Open();
-
-                    string cmd2 = $"SELECT PremierId FROM UserPremier Inner Join Premier ON UserPremier.PremierId = Premier.id where Premier.NameOfPremierSeries like '{text}' and UserId like '{IDU}'";
-                    SqlCommand createCommand2 = new SqlCommand(cmd2, sqlConnection);
-                    int i = Convert.ToInt32(createCommand2.ExecuteScalar());
-                    if (i != 0)
+                    var text = (ListOfPremier.SelectedItem as DataRowView)["NameOfPremierSeries"].ToString();
+                    try
                     {
-                        MessageBox.Show("Премьера уже добавлена");
+
+                        SqlConnection sqlConnection = new SqlConnection(@" Data Source = DESKTOP-H0E8CDQ\MSSQLSERVER01; Initial Catalog = YourSeries; Integrated Security = True");
+                        SqlDataAdapter dataAdapter = new SqlDataAdapter();
+                        sqlConnection.Open();
+
+                        string cmd2 = $"SELECT PremierId FROM UserPremier Inner Join Premier ON UserPremier.PremierId = Premier.id where Premier.NameOfPremierSeries like '{text}' and UserId like '{IDU}'";
+                        SqlCommand createCommand2 = new SqlCommand(cmd2, sqlConnection);
+                        int i = Convert.ToInt32(createCommand2.ExecuteScalar());
+                        if (i != 0)
+                        {
+                            MessageBox.Show("Премьера уже добавлена");
+                        }
+                        else
+                        {
+                            string getPremierId = $"SELECT id FROM Premier WHERE NameOfPremierSeries like '{text}'";
+                            SqlCommand createCommand3 = new SqlCommand(getPremierId, sqlConnection);
+                            string premierID = createCommand3.ExecuteScalar().ToString();
+                            int IdPremier = Convert.ToInt32(premierID);
+
+                            string cmd = $" Insert into UserPremier(UserId,PremierID) values('{IDU}','{IdPremier}')";
+
+                            SqlCommand createCommand = new SqlCommand(cmd, sqlConnection);
+                            createCommand.ExecuteNonQuery();
+                        }
+                        sqlConnection.Close();
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        string getPremierId = $"SELECT id FROM Premier WHERE NameOfPremierSeries like '{text}'";
-                        SqlCommand createCommand3 = new SqlCommand(getPremierId, sqlConnection);
-                        string premierID = createCommand3.ExecuteScalar().ToString();
-                        int IdPremier = Convert.ToInt32(premierID);
-
-                        string cmd = $" Insert into UserPremier(UserId,PremierID) values('{IDU}','{IdPremier}')";
-
-                        SqlCommand createCommand = new SqlCommand(cmd, sqlConnection);
-                        createCommand.ExecuteNonQuery();
+                        MessageBox.Show(ex.Message);
                     }
-                    sqlConnection.Close();
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show("Выберите элемент из списка");
                 }
             }
-            else
+            catch (Exception ex)
             {
                 MessageBox.Show("Выберите элемент из списка");
             }
@@ -571,10 +649,10 @@ namespace Course_Work_2sem
         //Просмотренные сериалы
         private void ViewsSeries(object sender, RoutedEventArgs e)
         {
-            ListOfPremierUset.Visibility = Visibility.Hidden;
-            ListOfUserSeries.Visibility = Visibility.Visible;
             try
             {
+                ListOfPremierUset.Visibility = Visibility.Hidden;
+                ListOfUserSeries.Visibility = Visibility.Visible;
                 SqlConnection sqlConnection = new SqlConnection(@" Data Source = DESKTOP-H0E8CDQ\MSSQLSERVER01; Initial Catalog = YourSeries; Integrated Security = True");
                 SqlDataAdapter dataAdapter = new SqlDataAdapter();
                 sqlConnection.Open();
@@ -598,16 +676,16 @@ namespace Course_Work_2sem
 
         private void MyPremier(object sender, RoutedEventArgs e)
         {
-            ListOfPremier.Visibility = Visibility.Hidden;
-            ListOfAllSeries.Visibility = Visibility.Hidden;
-            ListOfUserSeries.Visibility = Visibility.Hidden;
-
-            RightPabelMySeries.Visibility = Visibility.Visible;
-            rightPanelSeries.Visibility = Visibility.Hidden;
-
-            ListOfPremierUset.Visibility = Visibility.Visible;
             try
             {
+                ListOfPremier.Visibility = Visibility.Hidden;
+                ListOfAllSeries.Visibility = Visibility.Hidden;
+                ListOfUserSeries.Visibility = Visibility.Hidden;
+
+                RightPabelMySeries.Visibility = Visibility.Visible;
+                rightPanelSeries.Visibility = Visibility.Hidden;
+
+                ListOfPremierUset.Visibility = Visibility.Visible;
                 SqlConnection sqlConnection = new SqlConnection(@" Data Source = DESKTOP-H0E8CDQ\MSSQLSERVER01; Initial Catalog = YourSeries; Integrated Security = True");
                 SqlDataAdapter dataAdapter = new SqlDataAdapter();
                 sqlConnection.Open();
@@ -626,18 +704,25 @@ namespace Course_Work_2sem
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("Что-то пошло не так....");
             }
         }
 
         private void CleanFilter(object sender, RoutedEventArgs e)
         {
-            MinMax.IsChecked = false;
-            MaxMin.IsChecked = false;
-            BoxWithCategoryFilter.SelectedIndex = -1;
-            FilterForCountry.SelectedIndex = -1;
-            YearFilter.Text = "";
-
+            try
+            {
+                MinMax.IsChecked = false;
+                MaxMin.IsChecked = false;
+                BoxWithCategoryFilter.SelectedIndex = -1;
+                FilterForCountry.SelectedIndex = -1;
+                YearFilter.Text = "";
+                AllSeries();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Что-то пошло не так");
+            }
             
         }
 

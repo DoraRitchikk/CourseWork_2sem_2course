@@ -93,18 +93,25 @@ namespace Course_Work_2sem
             }
             catch(Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("Проверьте правильность введённых данных");
             }
-            
+
         }
 
         //Регистрация (Новое окно)
         private void Registration(object sender, RoutedEventArgs e)
         {
-            RegistrationWin Register = new RegistrationWin();
-            Register.Show();
-            //Закрываем текущее окно
-            this.Close();
+            try
+            {
+                RegistrationWin Register = new RegistrationWin();
+                Register.Show();
+                //Закрываем текущее окно
+                this.Close();
+            }
+            catch
+            {
+                MessageBox.Show("Что-то пошло не так...Попробуйте снова");
+            }
         }
     }
 }
