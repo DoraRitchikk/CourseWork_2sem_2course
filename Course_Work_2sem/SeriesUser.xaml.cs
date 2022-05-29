@@ -66,7 +66,7 @@ namespace Course_Work_2sem
 
 
             this.MinHeight = 700;
-            this.MinWidth = 900;
+            this.MinWidth = 1000;
         }
 
         public SeriesUser()

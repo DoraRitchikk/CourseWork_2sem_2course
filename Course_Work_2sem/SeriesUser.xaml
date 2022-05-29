@@ -10,34 +10,35 @@
         Icon="/Image/SeriesMainIkon.png">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="214*"/>
-            <ColumnDefinition Width="435*"/>
-            <ColumnDefinition Width="151*"/>
+            <ColumnDefinition Width="221*"/>
+            <ColumnDefinition Width="442*"/>
+            <ColumnDefinition Width="165*"/>
         </Grid.ColumnDefinitions>
 
 
         <!-- МЕНЮ БОКОВОЕ-->
-        <StackPanel Background="#21243D" Grid.Column="0" >
-            <StackPanel HorizontalAlignment="Center">
+        <StackPanel Background="#21243D" Grid.Column="0"  >
+            <Label Content="YourSeries" Foreground="White" FontFamily="GOST type AU" FontSize="27" HorizontalAlignment="Center" Margin="20,8,0,0"/>
+            <StackPanel HorizontalAlignment="Center" Height="60" >
                 <WrapPanel Height="55" >
                     <Image Source="/Image/MySeries.png" Width="58" Height="50"/>
                     <Button FontFamily="GOST Type AU" Content="Мои сериалы" Background="White" FontSize="24" Width="148" Height="28"  Command="{Binding MySeries}"  BorderThickness="0" />
                 </WrapPanel>
             </StackPanel>
-            <StackPanel  HorizontalAlignment="Center">
+            <StackPanel  HorizontalAlignment="Center" Height="60">
                 <WrapPanel Height="55" >
                     <Image Source="/Image/Another.png" Width="58" Height="50"/>
                     <Button Content="Сериалы" Background="White"  FontSize="24" Width="148" Height="28" FontFamily="GOST Type AU" 
                             Command="{Binding AllSeries}" BorderThickness="0"/>
                 </WrapPanel>
             </StackPanel>
-            <StackPanel HorizontalAlignment="Center">
+            <StackPanel HorizontalAlignment="Center" Height="60">
                 <WrapPanel  Height="55">
                     <Image Source="Image/User.png" Width="58" Height="50" />
                     <Button FontFamily="GOST Type AU" Content="Мой профиль" FontSize="24" BorderThickness="0" Background="White" Width="148" Height="28" Command="{Binding MyProfile}"/>
                 </WrapPanel>
             </StackPanel>
-            <StackPanel HorizontalAlignment="Center">
+            <StackPanel HorizontalAlignment="Center" Height="60">
                 <WrapPanel  Height="55">
                     <Image Source="Image/Premier.png" Width="58" Height="50" />
                     <Button FontFamily="GOST Type AU" Content="Премьеры" FontSize="24" BorderThickness="0" Background="White" Width="148" Height="28" Command="{Binding Premier}" />
@@ -52,7 +53,7 @@
         </StackPanel>
 
         <!-- Выход -->
-        <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Center"  Height="55" Width="206">
+        <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Center"  Height="55" Width="206" Margin="0,529,0,0">
             <WrapPanel  Height="55">
                 <Image Source="/Image/exit.png" Width="58" Height="50"/>
                 <Button FontFamily="GOST Type AU" Content="Выход" FontSize="24"  BorderThickness="0" Background="White" Height="28" Command="{ Binding Exit}" Width="148"/>
@@ -61,21 +62,21 @@
         <!-- Поиск -->
         <StackPanel Grid.Column="1" Background="#21243D" x:Name="SearchPanel" >
             <WrapPanel Height="47">
-                <Label Content="Поиск : " Foreground="White" Margin="8,10,0,0" FontFamily="GOST Type AU" FontSize="20"/>
+                <Label Content="Поиск : " Foreground="White" Margin="8,10,0,0" FontFamily="GOST Type AU" FontSize="26"/>
                 <TextBox Background="White"  Width="338" FontSize="18" FontFamily="GOST Type AU" Height="26" Margin="5,10,0,0" x:Name="SearchBoxText" TextChanged="ChangeMethod" />
             </WrapPanel>
         </StackPanel>
 
         <!-- Вместо поискка на странице с сериалами юзера-->
         <StackPanel Grid.Column="1" Background="#21243D" x:Name="PanelOnUsersSeries" Visibility="Hidden">
-            <TextBlock Text="Ваши сериалы" Background="#21243D" Foreground="White" Width="371" FontSize="28" FontFamily="GOST Type AU" Height="37" Margin="22,10,0,0" />
+            <TextBlock Text="Ваши сериалы" Background="#21243D" Foreground="White" Width="371" FontSize="28" FontFamily="GOST Type AU" Height="37" HorizontalAlignment="Left" Margin="10,10,0,0"/>
         </StackPanel>
 
         <!-- Вывод информации обо всех сериалах -->
         <ListBox Grid.Column="1"  x:Name="ListOfAllSeries" BorderThickness="0" Margin="0,59,0,0" >
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <WrapPanel>
+                    <WrapPanel Margin="0,10,0,0">
                         <StackPanel>
                             <Image Source="{Binding Path=imageSeries }" Width="200" Height="100"/>
                             <Button x:Name="MoreInf" Content="Подробнее" Foreground="White" Background="#21243D" FontSize="18" Margin="0,10,0,0" Width="120" Click="MoreInfClick"/>
@@ -190,17 +191,18 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+
         <!-- правая панель юзера -->
-        <StackPanel  Background="#21243D" Grid.Column="2" x:Name="RightPabelMySeries" Visibility="Hidden">
-            <Image Source="{Binding Path=PhotoOfUser}" Width="110" Margin="0,10,0,0" x:Name="imgUser"/>
-            <TextBlock Text="{Binding Path=NameOfUser}" x:Name="NameuserBpx" Foreground="White" FontSize="22" Width="134" Height="30"  Margin="45,10,0,0" FontFamily="GOST Type AU"/>
-            <Button Content="Просмотренные " Foreground="Black" Background="White" Width="120" Height="26" FontFamily="GOST Type AU" FontSize="18" Click="ViewsSeries"/>
-            <Button Content="Мои премьеры" Foreground="Black" Background="White" Width="120" Height="26" FontFamily="GOST Type AU" FontSize="18" Margin="0,10,0,0" Click="MyPremier"/>
+        <StackPanel  Background="#21243D" Grid.Column="2" x:Name="RightPabelMySeries" Visibility="Hidden" >
+            <TextBlock Text="{Binding Path=NameOfUser}" x:Name="NameuserBpx" Foreground="White" FontSize="22" Margin="40,20,0,0" Width="134" Height="30" FontFamily="GOST Type AU"/>
+            <Image Source="{Binding Path=PhotoOfUser}" Width="150" Margin="0,10,0,0" x:Name="imgUser" />
+            <Button Content="Просмотренные " Foreground="Black" Background="White" Width="140" Height="31" Margin="0,20,0,0" FontFamily="GOST Type AU" FontSize="20" Click="ViewsSeries"/>
+            <Button Content="Мои премьеры" Foreground="Black" Background="White" Width="140" Height="31" FontFamily="GOST Type AU" FontSize="20" Margin="0,10,0,0" Click="MyPremier"/>
         </StackPanel>
         <!-- Боковое правое меню-->
         <StackPanel  Background="#21243D"  Grid.Column="2" x:Name="rightPanelSeries">
             <Image Source="Image/Logo.jpg" Width="110" Margin="0,10,0,0"/>
-            <StackPanel Margin="0,10,0,0">
+            <StackPanel Margin="0,15,0,0">
                 <Label Content="Фильтрация : " Foreground="White" Width="106" FontFamily="GOST Type AU" FontSize="22"/>
                 <TextBlock Text="Категория" HorizontalAlignment="Center" Foreground="White" FontFamily="GOST Type AU" FontSize="20"/>
                 <ComboBox Height="25" Width="140" FontFamily="GOST Type AU" Margin="0,10,0,0" FontSize="18" x:Name="BoxWithCategoryFilter">

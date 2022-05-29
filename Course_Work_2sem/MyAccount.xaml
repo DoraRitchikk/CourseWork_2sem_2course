@@ -9,21 +9,32 @@
         WindowStartupLocation="CenterScreen"
         Icon="/Image/UserWin.png">
     <Grid Background="#21243D">
-        <Image Margin="10,15,222,245"  x:Name="imageBox"/>
-        <TextBox Margin="10,248,222,150" Foreground="Black" FontSize="18" x:Name="SRCForUserImage"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="47*"/>
+            <ColumnDefinition Width="53*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="99*"/>
+            <RowDefinition Height="108*"/>
+            <RowDefinition Height="125*"/>
+            <RowDefinition Height="102*"/>
+        </Grid.RowDefinitions>
+        <Image Margin="10,15,10,18"  x:Name="imageBox" Grid.RowSpan="2" Grid.Row="0"/>
+        <TextBox Margin="10,41,10,48" Foreground="Black" FontSize="18" x:Name="SRCForUserImage" Grid.Row="2"/>
 
-        <TextBlock Text="Логин" Foreground="White" FontSize="18" Margin="204,19,24,368"/>
-        <TextBox Margin="204,55,24,343" Foreground="Black" FontSize="18" x:Name="NewLogin"/>
+        <TextBlock Text="Логин" Foreground="White" FontSize="18" Margin="16,19,24,33" Grid.Row="0" Grid.Column="1"/>
+        <TextBox Margin="16,55,24,8" Foreground="Black" FontSize="18" x:Name="NewLogin"  Grid.Row="0" Grid.Column="1"/>
 
-        <TextBlock Text="Новый пароль" Foreground="White" FontSize="18" Margin="204,113,44,283"/>
-        <TextBox Margin="204,156,24,242" Foreground="Black" FontSize="18" x:Name="NewPassword"/>
+        <TextBlock Text="Новый пароль" Foreground="White" FontSize="18" Margin="16,14,44,56" Grid.Row="1" Grid.Column="1"/>
+        <TextBox Margin="16,57,24,15" Foreground="Black" FontSize="18" x:Name="NewPassword" Grid.Row="1" Grid.Column="1"/>
 
-        <TextBlock Text="Повторите пароль" Foreground="White" FontSize="18" Margin="204,205,44,191"/>
-        <TextBox Margin="204,248,24,150" Foreground="Black" FontSize="18" x:Name="NewPasswordRepeat"/>
+        <TextBlock Text="Повторите пароль" Foreground="White" FontSize="18"  Margin="14,0,0,0" Grid.Row="2" Grid.Column="1" />
+        <TextBox Margin="16,41,24,48" Foreground="Black" FontSize="18" x:Name="NewPasswordRepeat" Grid.Row="2" Grid.Column="1"/>
 
-        <Button Width="150" Height="40" Margin="225,370,25,24" Background="White" FontSize="18" Content="Изменить" Click="ChangeUser"/>
-        <Button Height="40" Margin="36,370,248,24" Background="White" FontSize="18" Content="Закрыть" Click="Back"/>
-        <TextBlock Text="Ссылка на изображение" TextWrapping="Wrap" Foreground="White" FontSize="18" Margin="18,194,230,191"/>
+        <Button Margin="37,38,25,24" Grid.Column="1" Background="White" FontSize="18" Content="Изменить" Click="ChangeUser" Grid.Row="3" />
+        <Button Margin="36,38,36,24" Background="White" Grid.Column="0" FontSize="18" Content="Закрыть" Click="Back" Grid.Row="3"/>
+
+        <TextBlock Text="Ссылка на изображение" TextWrapping="Wrap" Foreground="White" FontSize="18" Margin="10,-10,0,0" Grid.Row="2" />
 
 
     </Grid>

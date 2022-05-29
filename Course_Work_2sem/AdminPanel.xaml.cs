@@ -22,6 +22,7 @@ namespace Course_Work_2sem
     public partial class AdminPanel : Window
     {
         DB_Connection conn = new DB_Connection();
+        public static bool isOpened = false;
         public AdminPanel()
         {
             InitializeComponent();
@@ -34,35 +35,43 @@ namespace Course_Work_2sem
         {
             try
             {
-
                 string NameOfSeries = NameS.Text;
                 string categor = Categor.Text;
                 string CountryOfSer = Country.Text;
                 string YearRelize = Year.Text;
                 string imageSRC = "https://tsum.by/upload/no-photo.png";
-                if (ImageSer.Text.Length > 0)
+                if (NameOfSeries.Length > 0 && categor.Length > 0 && CountryOfSer.Length > 0 && YearRelize.Length > 0 && imageSRC.Length > 0)
                 {
-                    imageSRC = ImageSer.Text;
-                }
-                //Передаём информацию в БД
-                string queryString = $"Insert into SERIES (NameOfSeries,Category,CountryOfSeries,yearValue,imageSeries) values('{NameOfSeries}','{categor}','{CountryOfSer}','{YearRelize}','{imageSRC}')";
+                    if (ImageSer.Text.Length > 0)
+                    {
+                        imageSRC = ImageSer.Text;
+                    }
+                    //Передаём информацию в БД
+                    string queryString = $"Insert into SERIES (NameOfSeries,Category,CountryOfSeries,yearValue,imageSeries) values('{NameOfSeries}','{categor}','{CountryOfSer}','{YearRelize}','{imageSRC}')";
 
-                SqlCommand command = new SqlCommand(queryString, conn.GetConnection());
+                    SqlCommand command = new SqlCommand(queryString, conn.GetConnection());
 
-                conn.OpenConnection();
-                if (command.ExecuteNonQuery() == 1)
-                {
-                    MessageBox.Show("Регистрация прошла успешно");
+                    conn.OpenConnection();
+                    if (command.ExecuteNonQuery() == 1)
+                    {
+                        MessageBox.Show("Регистрация прошла успешно");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Проблемы с подключением...");
+                    }
+                    conn.CloseConnection();
+
+                    MessageBox.Show("Успешно добавлено");
                 }
                 else
                 {
-                    MessageBox.Show("Проблемы с подключением...");
+                    MessageBox.Show("Вы ввели не все поля");
                 }
-                conn.CloseConnection();
             }
             catch(Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("Проверьте правильномсть введённых данных");
             }
         }
 
@@ -75,26 +84,35 @@ namespace Course_Work_2sem
                 int NumEpisodes = Convert.ToInt32(NumSeries.Text);
                 int IdSeri = Convert.ToInt32(IdSer.Text);
 
-
-                //Передаём информацию в БД
-                string queryString = $"Insert into Episodes (IdSeries,NumOfSeason,NumOfEpisodes) values('{IdSeri}','{SeasonB}','{NumEpisodes}')";
-
-                SqlCommand command = new SqlCommand(queryString, conn.GetConnection());
-
-                conn.OpenConnection();
-                if (command.ExecuteNonQuery() == 1)
+                if (SeasonB.ToString().Length > 0 && NumEpisodes.ToString().Length > 0 && IdSeri.ToString().Length > 0)
                 {
+                    //Передаём информацию в БД
+                    string queryString = $"Insert into Episodes (IdSeries,NumOfSeason,NumOfEpisodes) values('{IdSeri}','{SeasonB}','{NumEpisodes}')";
 
+                    SqlCommand command = new SqlCommand(queryString, conn.GetConnection());
+
+                    conn.OpenConnection();
+                    if (command.ExecuteNonQuery() == 1)
+                    {
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("Проблемы с подключением...");
+                    }
+
+                    MessageBox.Show("Успешно добавлено");
+
+                    conn.CloseConnection();
                 }
                 else
                 {
-                    MessageBox.Show("Проблемы с подключением...");
+                    MessageBox.Show("Вы заполнили не все поля");
                 }
-                conn.CloseConnection();
             }
             catch(Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("Проверьте правильномсть введённых данных");
             }
         }
 
@@ -118,10 +136,12 @@ namespace Course_Work_2sem
                     MessageBox.Show("Проблемы с подключением...");
                 }
                 conn.CloseConnection();
+
+                MessageBox.Show("Успешно добавлено");
             }
             catch(Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("Проверьте правильномсть введённых данных");
             }
         }
 
@@ -141,27 +161,18 @@ namespace Course_Work_2sem
                 SqlDataAdapter dataAdapter = new SqlDataAdapter();
                 sqlConnection.Open();
 
-                /*            string im = $"SELECT imageSeries FROM SERIES where IDSeries like '{IdSeries}'";
-                            SqlCommand createCommand6 = new SqlCommand(im, sqlConnection);
-                            string NewImageDB = createCommand6.ExecuteScalar().ToString();
-
-                            if (NewImage.Text != "")
-                            {
-                                NewImageDB = NewImage.Text;
-                            }
-                */
                 string cmd = $" UPDATE SERIES SET NameOfSeries = '{NewNameDB}',Category = '{NewCatDB}',CountryOfSeries = '{NewCountryDB}',yearValue = '{NewYearDB}',imageSeries = '{Newimage}' where IDSeries like '{IdSeries}'";
 
 
                 SqlCommand createCommand = new SqlCommand(cmd, sqlConnection);
                 createCommand.ExecuteNonQuery();
 
-
+                MessageBox.Show("Успешно изменено");
                 sqlConnection.Close();
             }
             catch(Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("Проверьте правильномсть введённых данных");
             }
         }
 
@@ -200,21 +211,11 @@ namespace Course_Work_2sem
                 string img2 = createCommand6.ExecuteScalar().ToString();
                 NewImage.Text = img2;
 
-                /*            string NumSeas = $"SELECT NumOfSeason FROM Episodes where IdSeries like '{IdSeries}'";
-                            SqlCommand createCommand4 = new SqlCommand(NumSeas, sqlConnection);
-                            string NumSeas2 = createCommand4.ExecuteScalar().ToString();
-                            NewSeason.Text = NumSeas2;
-
-                            string NumEpis = $"SELECT NumOfEpisodes FROM Episodes where IdSeries like '{IdSeries}'";
-                            SqlCommand createCommand5 = new SqlCommand(NumEpis, sqlConnection);
-                            string NumEpis2 = createCommand5.ExecuteScalar().ToString();
-                            NewNumSeries.Text = NumEpis2;*/
-
                 sqlConnection.Close();
             }
             catch(Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("Проверьте правильномсть введённых данных");
             }
         }
 
@@ -238,15 +239,23 @@ namespace Course_Work_2sem
 
                     SqlCommand createCommand = new SqlCommand(cmd, sqlConnection);
                     createCommand.ExecuteNonQuery();
-
+                    MessageBox.Show("Успешно изменено");
 
                     sqlConnection.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Заполните поля");
                 }
             }
             catch(Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("Проверьте правильномсть введённых данных");
             }
+        }
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            isOpened = false;
         }
     }
 }

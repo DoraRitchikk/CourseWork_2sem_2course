@@ -31,6 +31,9 @@ namespace Course_Work_2sem
             this.MinHeight = 470;
             this.MinWidth = 420 ;
 
+            this.MaxHeight = 520;
+            this.MaxWidth = 700;
+
             SqlConnection sqlConnection = new SqlConnection(@" Data Source = DESKTOP-H0E8CDQ\MSSQLSERVER01; Initial Catalog = YourSeries; Integrated Security = True");
             SqlDataAdapter dataAdapter = new SqlDataAdapter();
             sqlConnection.Open();

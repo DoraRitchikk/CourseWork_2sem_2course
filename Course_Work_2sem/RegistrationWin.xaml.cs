@@ -27,10 +27,10 @@ namespace Course_Work_2sem
         {
             InitializeComponent();
 
-            this.MaxHeight = 450;
+            this.MaxHeight = 500;
             this.MaxWidth = 400;
 
-            this.MinHeight = 470;
+            this.MinHeight = 500;
             this.MinWidth = 400;
         }
 

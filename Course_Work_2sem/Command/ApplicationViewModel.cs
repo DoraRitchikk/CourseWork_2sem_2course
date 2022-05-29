@@ -98,7 +98,11 @@ namespace Course_Work_2sem
 
                 return adminPanel ?? (adminPanel= new RelayCommand(obj =>
                 {
-                    SeriesUser.SeriesU.ControlItems();
+                    if (AdminPanel.isOpened == false)
+                    {
+                        AdminPanel.isOpened = true;
+                        SeriesUser.SeriesU.ControlItems();
+                    }
                 }));
             }
         }
